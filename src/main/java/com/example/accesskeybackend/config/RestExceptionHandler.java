@@ -1,6 +1,7 @@
 package com.example.accesskeybackend.config;
 
 import com.example.accesskeybackend.exception.AlreadyActivatedException;
+import com.example.accesskeybackend.exception.DnsConnectionException;
 import com.example.accesskeybackend.exception.IllegalArgumentException;
 import com.example.accesskeybackend.exception.NotFoundException;
 import jakarta.validation.ConstraintViolation;
@@ -46,6 +47,13 @@ public class RestExceptionHandler {
 
         return new ExceptionResponse(exceptions);
     }
+
+    @ExceptionHandler(value = DnsConnectionException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ExceptionResponse checkingIpv6Support(final DnsConnectionException ex) {
+        return new ExceptionResponse(List.of(ex.getMessage()));
+    }
+
 
 
     private static <T> String getValidationMessage(final ConstraintViolation<T> violation) {
